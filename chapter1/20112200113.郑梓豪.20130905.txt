@@ -1,0 +1,174 @@
+8.求级数的和.
+sum(1/4^i)=1+1/4+1/4^2+...+1/4^n+...
+          =(1-(1/4)^n+1)/(1-1/4)
+          =4/3
+
+
+sum(i/4^i)=0+1/4+2/4^2+3/4^3+...+n/4^n+...
+不妨记上式为S，则
+        4S=0+1+2/4^2+3/4^3+...+n/4^n+...
+所以    3S=1+1/4+1/4^2+1/4^3+...+1/4^n+...
+          =4/3
+从而     S=4/9
+           
+
+sum(i^2/4^i)=0+1/4+2^2/4^2+3^2/4^3+...+n^2/4^n+...
+记上式为S，则
+           4S=0+1+2^2/4+3^2/4^2+4^2/4^3+...
+           3S=1+3/4+5/4^2+7/4^3+...+(2n+1)/4^n+...
+          12S=4+3+5/4+7/4^2+...+(2n+3)/4^n+...
+所以       9S=6+2/4+2/4^2+2/4^3+...
+             =26/3
+从而        S=26/27
+
+
+
+
+10.求2^100(mod5)
+考虑到对5的除法运算只能整除尾数为0或5的数字，除此之外的mod运算
+结果均为数字的个位。
+所以，2^1=2,  2^2=4,  2^3=8,  2^4=16
+      2^5=32, 2^6=64, 2^7=128, 2^8=256
+      ...
+所以2^100的个位是6,从而2^100(mod5)=6
+
+
+
+12.用数学归纳法进行证明
+(1) sum(2i-1)=N^2
+证明：
+       当i=1时，显然有2-1=1;
+不妨设 当i=k时，有sum(2i-1)=k^2;
+从而   当i=k+1，sum(2i-1)=sum(2i-1)+(2k+1)-1
+                         =k^2+2k+1=(k+1)^2
+得证。
+
+(2) sum(i^3)=(sum(i))^2
+证明：
+       当i=1时，显然有1^3=1;
+不妨设 当i=k时，有sum(i^3)=(sum(i))^2;  i from 1 to k
+从而   当i=k+1，
+
+//做到这里就不会继续了...
+
+
+
+
+
+
+//
+//  matrix.h
+//  Matrix
+//
+//  Created by 郑 梓豪 on 13-9-12.
+//  Copyright (c) 2013年 郑 梓豪. All rights reserved.
+//
+
+#ifndef Matrix_matrix_h
+#define Matrix_matrix_h
+
+#include <vector>
+using namespace std;
+
+template <typename Object>
+class matrix
+{
+public:
+    matrix(int rows=2, int cols=2):array(rows)
+    {
+        cout<<"constructor called."<<endl;
+        for(int i=0;i<rows;i++)
+            array[i].resize(cols);
+    }
+    
+    matrix( const matrix & rhs ):array(rhs.array){
+        cout<<"copy constructor called."<<endl;
+        
+    }
+    
+    ~matrix() {
+        cout<<"destructor called."<<endl;
+    }
+    
+    void resize(int rows, int cols){
+        array.resize(rows);
+        for (int i=0; i<rows; i++) {
+            array[i].resize(cols);
+        }
+    }
+    
+    const vector<Object> & operator[] (int row) const
+    { return array[row]; }
+    
+    vector<Object> & operator[] (int row)
+    { return array[row]; }
+    
+    
+    /**
+     You can get the dimension info
+     */
+    int numrows() const
+    { return array.size(); }
+    
+    int numcols() const
+    { return numrows() ? array[0].size() : 0 ; }
+    
+private:
+    vector< vector<Object> >array;
+};
+
+
+#endif
+
+
+
+//
+//  main.cpp
+//  Matrix
+//
+//  Created by 郑 梓豪 on 13-9-12.
+//  Copyright (c) 2013年 郑 梓豪. All rights reserved.
+//
+
+#include <iostream>
+#include "matrix.h"
+using namespace std;
+
+int main()
+{
+    /**
+     To define two matrix with different parameters, then
+     you would see their dimensions.
+     */
+    
+    matrix<int> m1(3,2);
+    matrix<int> m2;
+    //matrix<int> m3=m2; // copy constructor called.
+    
+    m1[1]={1,2};
+    
+    /* 体会matrix类的数据成员
+    vector<vector<int>> a(3);
+    cout<<"the size of vector a: "<<a.size()<<endl;
+    
+    a[0].resize(10);
+    a[1].resize(3);
+    a[2].resize(5);
+    for (int i=0; i<3; i++) {
+        cout<<"the size of new vector a["<<i<<"]: "<<a[i].size()<<endl;
+    }*/
+    
+    
+    
+    cout<<"Size of m1:"<<endl;
+    cout<<m1.numrows()<<" x "<<m1.numcols()<<endl;
+    m1.resize(4, 5);
+    cout<<"Using resize, the size of m1:"<<endl;
+    cout<<m1.numrows()<<" x "<<m1.numcols()<<endl;
+    m2.resize(1, 3);
+    cout<<"Using resize, the size of m2:"<<endl;
+    cout<<m2.numrows()<<" x "<<m2.numcols()<<endl;
+
+    return 0;
+}
+
