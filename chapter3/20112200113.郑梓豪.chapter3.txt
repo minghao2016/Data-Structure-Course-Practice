@@ -1,0 +1,160 @@
+3.1 给定一个链表L和另一个连标P,它们包含以升序排列的整数。操作printLots(L,P)将打印L中那些由P所指定的位置上的元素。写出过程printLots(L,P)
+
+void printLots(const list<int>& L, const list<int>& P)
+{
+	printf("printLots Called.\n");
+	for( list<int>::const_iterator itr_P=P.begin(); itr_P != P.end(); itr_P++)
+	{
+		int k = 1;
+		for( list<int>::const_iterator itr_L=L.begin(); itr_L != L.end(); itr_L++)
+		{
+			if( k == *itr_P )
+				cout<<*itr_L<<" ";
+			k++;
+		}
+	}
+	cout<<endl;
+}
+---------------------------------------------------------------------------
+MacBook:gcc white$ ./ex3.1
+Please enter list P. Put 0 to stop.
+1
+2
+4
+0
+Done.
+
+Please enter list L.Put 0 to stop.
+1
+2
+3
+4
+5
+6
+0
+Done.
+
+printLots Called.
+1 2 4 
+
+
+******************************************************************************************
+
+3.6 Josephus问题是下面的这个游戏:有N个人坐成一圈,编号1-N。从编号为1的人开始传递热马铃薯。M次传递以后,持有热马铃薯的人退出,圈缩小,游戏继续。
+   a.写出一个程序来解决Josephus问题,此时M和N为任意值。尽可能使程序高效,同时保证存储单元被正确处理
+
+
+   b.程序运行时间?
+
+
+   c.M=1时,程序运行时间是多少?对较大N(N>10000),delete例程对程序运行速度的影响?
+
+
+
+
+
+
+******************************************************************************************
+
+3.11 假设一个单向链表的实现有一个表头结点,没有尾结点,并且只有一个指向表头结点的指针.写一个类,实现下列功能:
+   a.返回链表大小
+      建立类私有数据成员int currentSize;对链表操作(insert,erase)进行记录.
+   
+   b.打印链表
+      printList()以头接点开始遍历输出,直至结点指针为NULL.
+
+   c.检测值x是否在链表中; d.若不存在,则插入; e.若存在,则删除.
+      建立 exist(x), find(x), find_erase() & find_insert()函数即可.
+
+
+----------------------------------------
+Initialize a:
+a=[10 9 8 7 6 5 4 3 2 1 ]
+size:10
+
+----------------------------------------
+erase the item if x exists, insert it otherwise:
+x=100
+100 not exist! Insert.
+a=[100 10 9 8 7 6 5 4 3 2 1 ]
+size:11
+
+----------------------------------------
+Initialize a:
+a=[10 9 8 7 6 5 4 3 2 1 ]
+size:10
+
+----------------------------------------
+erase the item if x exists, insert it otherwise:
+x=8
+8 exist! Erase.
+a=[10 9 7 6 5 4 3 2 1 ]
+size:9
+
+
+
+
+
+******************************************************************************************
+
+3.22 编写一个程序计算后缀表达式的值
+
+
+
+******************************************************************************************
+
+3.31 使用单项链表高效地实现栈类.要求不含头尾结点
+
+分析:栈的最主要特征就是“后进先出”.即执行push时进入栈顶,pop时从栈顶弹出.所以只要单项链表提供这些功能即可.设计的
+
+主要思路:
+   1. 使用了top结点来表示栈顶.但此栈顶应该不是严格意义上的head/tail结点,因为top不断变化,且用于存储.
+   2. push操作.当currentSize=0时,(此时stack对象有top结点,只是未被利用),top->element = x;其他情形调整指针即可.
+   3. pop操作.当currentSize=1,(即将pop出最后一个item时),修改currentSize,使当前item不可见.并未删除最后这个node.
+
+
+void pop() {
+    if(currentSize == 0)       { printf("the list is empty.\n"); }
+    else if(currentSize > 0)   { node* q = top; top = top->next; delete q;currentSize--; }
+}
+
+void push(const T& x) {
+    if(currentSize == 0)      { top->element = x; currentSize++; }
+    else if(currentSize > 0)  { node* newTop = new node(x); newTop->next = top; top = newTop; currentSize++; }
+    else printf("something wrong!\n");
+}
+
+
+
+MacBook:gcc white$ ./ex3.31
+--------------------------------------------------
+push 1 to 10 into the stack made from slist.
+
+1 
+2 1 
+3 2 1 
+4 3 2 1 
+5 4 3 2 1 
+6 5 4 3 2 1 
+7 6 5 4 3 2 1 
+8 7 6 5 4 3 2 1 
+9 8 7 6 5 4 3 2 1 
+10 9 8 7 6 5 4 3 2 1 
+
+size:10
+
+--------------------------------------------------
+pop 11 times to clear the stack. // the final pop is to ensure stack's empty.
+9 8 7 6 5 4 3 2 1 
+8 7 6 5 4 3 2 1 
+7 6 5 4 3 2 1 
+6 5 4 3 2 1 
+5 4 3 2 1 
+4 3 2 1 
+3 2 1 
+2 1 
+1 
+
+the list is empty.
+
+size:0
